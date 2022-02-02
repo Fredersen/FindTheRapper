@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Game{% endblock %}
+{% block title %}Nouveau jeu{% endblock %}
 
 {% block body %}
-    <h1>Create new Game</h1>
-
-    {{ include('game/_form.html.twig') }}
-
-    <a href="{{ path('game_index') }}">back to list</a>
+    <div class="d-flex">
+        {{ include('admin/_index.html.twig') }}
+        <div class="d-flex flex-column mx-auto">
+            <h1>Créer un nouveau niveau</h1>
+            {{ include('game/_form.html.twig') }}
+        </div>
+    </div>
 {% endblock %}

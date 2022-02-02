@@ -12,9 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/game")
+ * @Route("/admin")
  */
-class GameController extends AbstractController
+class AdminController extends AbstractController
 {
     /**
      * @Route("/", name="game_index", methods={"GET"})
