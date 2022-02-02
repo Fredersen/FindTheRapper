@@ -3,14 +3,22 @@
 namespace App\Entity;
 
 use App\Repository\GameRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
+
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
  * @UniqueEntity(fields={"level"}, message="Il existe déjà un jeu correspondant à ce niveau !")
+ * @Vich\Uploadable
  */
 class Game
 {
@@ -19,32 +27,58 @@ class Game
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable="true")
+     * @var ?string
      */
-    private $photoMap;
+    private ?string $photoRapper = "";
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Vich\UploadableField(mapping="rapper", fileNameProperty="photoRapper")
+     * @Assert\File(
+     *     maxSize = "1M",
+     *     mimeTypes = {"image/jpeg", "image/png", "image/webp"},
+     * )
+     * @var ?File
      */
-    private $photoRapper;
+    private ?File $photoRapperFile = null;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable="true")
+     * @var ?string
      */
-    private $searchSound;
+    private ?string $searchSound = "";
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @Vich\UploadableField(mapping="search", fileNameProperty="searchSound")
+     * @Assert\File(
+     *     maxSize = "5M",
+     * )
+     * @var ?File
      */
-    private $victorySound;
+    private ?File $searchSoundFile = null;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable="true")
+     * @var ?string
+     */
+    private ?string $victorySound = "";
+
+    /**
+     * @Vich\UploadableField(mapping="victory", fileNameProperty="victorySound")
+     * @Assert\File(
+     *     maxSize = "5M",
+     * )
+     * @var ?File
+     */
+    private ?File $victorySoundFile = null;
 
     /**
      * @ORM\Column(type="integer")
@@ -71,6 +105,11 @@ class Game
      */
     private $users;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private ?\DateTimeInterface $updatedAt;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -93,24 +132,12 @@ class Game
         return $this;
     }
 
-    public function getPhotoMap(): ?string
-    {
-        return $this->photoMap;
-    }
-
-    public function setPhotoMap(string $photoMap): self
-    {
-        $this->photoMap = $photoMap;
-
-        return $this;
-    }
-
     public function getPhotoRapper(): ?string
     {
         return $this->photoRapper;
     }
 
-    public function setPhotoRapper(string $photoRapper): self
+    public function setPhotoRapper(?string $photoRapper): self
     {
         $this->photoRapper = $photoRapper;
 
@@ -122,7 +149,7 @@ class Game
         return $this->searchSound;
     }
 
-    public function setSearchSound(string $searchSound): self
+    public function setSearchSound(?string $searchSound): self
     {
         $this->searchSound = $searchSound;
 
@@ -134,7 +161,7 @@ class Game
         return $this->victorySound;
     }
 
-    public function setVictorySound(string $victorySound): self
+    public function setVictorySound(?string $victorySound): self
     {
         $this->victorySound = $victorySound;
 
@@ -218,4 +245,56 @@ class Game
 
         return $this;
     }
+
+    public function setPhotoRapperFile(File $image = null): Void
+    {
+        $this->photoRapperFile = $image;
+        if ($image) {
+            $this->updatedAt = new DateTime('now');
+        }
+    }
+
+    public function getPhotoRapperFile(): ?File
+    {
+        return $this->photoRapperFile;
+    }
+
+    public function setSearchSoundFile(File $song = null): Void
+    {
+        $this->searchSoundFile = $song;
+        if ($song) {
+            $this->updatedAt = new DateTime('now');
+        }
+    }
+
+    public function getSearchSoundFile(): ?File
+    {
+        return $this->searchSoundFile;
+    }
+
+    public function setVictorySoundFile(File $song = null): Void
+    {
+        $this->victorySoundFile = $song;
+        if ($song) {
+            $this->updatedAt = new DateTime('now');
+        }
+    }
+
+    public function getVictorySoundFile(): ?File
+    {
+        return $this->victorySoundFile;
+    }
+
+
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
 }
