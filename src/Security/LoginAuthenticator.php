@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Service\RedirectionService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +23,14 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'app_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private Security $security;
+    private RedirectionService $redirectionService;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Security $security, RedirectionService $redirectionService)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->security = $security;
+        $this->redirectionService = $redirectionService;
     }
 
     public function authenticate(Request $request): Passport
@@ -49,8 +54,11 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        return new RedirectResponse($this->urlGenerator->generate('game_show'));
+       if($this->security->isGranted('ROLE_ADMIN')) {
+           return new RedirectResponse($this->urlGenerator->generate('admin_game_index'));
+       } else {
+           return new RedirectResponse($this->urlGenerator->generate('game', ['id' => $this->redirectionService->getLevelId()]));
+       }
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

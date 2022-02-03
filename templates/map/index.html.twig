@@ -6,7 +6,11 @@
         {% for y in 0..6 %}
             <div class="row">
                 {% for x in 0..12 %}
-                       <div class="col"></div>
+                       <div class="col">
+                           {% if game.positionX == x and game.positionY == y %}
+                               <p>test</p>
+                           {% endif %}
+                       </div>
                 {% endfor %}
             </div>
         {% endfor %}

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/admin")
+ * @Route("/admin", name="admin_")
  */
 class AdminController extends AbstractController
 {
@@ -69,7 +69,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('game_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_game_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('game/edit.html.twig', [

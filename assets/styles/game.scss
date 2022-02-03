@@ -1,0 +1,20 @@
+.lost {
+  display: none;
+}
+
+.map{
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  table-layout: auto;
+  width: 1200px;
+  height: 600px;
+}
+
+.rapper {
+  cursor: pointer;
+  color: black;
+}
+
+.win {
+  display: none;
+}
