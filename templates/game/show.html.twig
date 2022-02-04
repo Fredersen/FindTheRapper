@@ -8,13 +8,15 @@
 {% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_logout') }}">Se déconnecter</a>
     <h1 class="text-center">Find The Invisible Rapper</h1>
     {#
     <img src="{{ asset('build/images/dollarcadre.png') }}" alt="ACME logo">
     #}
     <div class="information d-flex justify-content-center">
-        <h3 class="mx-4">Niveau {{ game.level }}/5</h3>
+        <h3 class="mx-4">Niveau {{ game.level }}/ {{ games|length }}</h3>
         <h3 id="timer" class="ml-4">{{ game.time }}</h3> <h3 class="mx-2">secondes</h3>
+        <h3 id="missClick" class="ml-4"></h3>
     </div>
     <div id="lost" class="lost text-center">
         <p>T'as perdu, tu veux recommencer poto ?</p>
@@ -23,22 +25,36 @@
         <a href="{{ path('app_logout') }}">Non</a>
     </div>
     <div id="win" class="win text-center">
-        <p>T'as gagné tu veux passer au prochain niveau ?</p>
-        <a href="{{ path(app.request.attributes.get('_route'),
-            app.request.attributes.get('_route_params')) }}">Oui</a>
+        <p>T'as trouvé {{ game.name }} tu veux passer au prochain niveau ?</p>
+        <a href="{{ path('game_level', {'level': game.level}) }}">Oui</a>
         <a href="{{ path('app_logout') }}">Non</a>
     </div>
-    <table class="map mx-auto" style="background-image:url('{{ asset('build/images/dollarcadre.png') }}')">
+    <div class="start text-center" id="start">
+        <button>Démarrez le jeu</button>
+    </div>
+    <table class="map mx-auto" id="map" style="background-image:url('{{ asset('build/images/dollarcadre.png') }}')">
         {% for y in 0..20 %}
             <tr class="">
                 {% for x in 0..36 %}
                     <td class="">
                         {% if game.positionX == x and game.positionY == y %}
-                            <p id="rapper" class="rapper">p</p>
+                            <p id="rapper" class="rapper">
+                                <img src="{{ asset('/uploads/' ~ game.photoRapper) }}" class="rapper-picture" id="rapperPicture">
+                            </p>
                         {% endif %}
                     </td>
                 {% endfor %}
             </tr>
         {% endfor %}
     </table>
+    <audio id="music" data-audio = "{{ asset('/uploads/' ~ game.searchSound) }}">
+        <source src="{{ asset('public/uploads/' ~ game.searchSound) }}" type="audio/filetype"/>
+    </audio>
+    <audio id="musicWin" data-win = "{{ asset('/uploads/' ~ game.victorySound) }}">
+        <source src="{{ asset('public/uploads/' ~ game.victorySound) }}" type="audio/filetype"/>
+    </audio>
+    <audio id="musicMiss" data-miss = "{{ asset('build/images/papi.mp3') }}">
+    </audio>
+    <audio id="musicOver" data-over = "{{ asset('build/images/booba.mp3') }}">
+    </audio>
 {% endblock %}

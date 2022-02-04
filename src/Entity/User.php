@@ -39,6 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="users")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
     private $game;
 

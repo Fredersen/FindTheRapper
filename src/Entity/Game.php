@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -43,9 +44,10 @@ class Game
     /**
      * @Vich\UploadableField(mapping="rapper", fileNameProperty="photoRapper")
      * @Assert\File(
-     *     maxSize = "1M",
+     *     maxSize = "3M",
      *     mimeTypes = {"image/jpeg", "image/png", "image/webp"},
      * )
+     * @Ignore()
      * @var ?File
      */
     private ?File $photoRapperFile = null;
@@ -59,8 +61,9 @@ class Game
     /**
      * @Vich\UploadableField(mapping="search", fileNameProperty="searchSound")
      * @Assert\File(
-     *     maxSize = "5M",
+     *     maxSize = "10M",
      * )
+     * @Ignore()
      * @var ?File
      */
     private ?File $searchSoundFile = null;
@@ -74,8 +77,9 @@ class Game
     /**
      * @Vich\UploadableField(mapping="victory", fileNameProperty="victorySound")
      * @Assert\File(
-     *     maxSize = "5M",
+     *     maxSize = "200M",
      * )
+     * @Ignore()
      * @var ?File
      */
     private ?File $victorySoundFile = null;
