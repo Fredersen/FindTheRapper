@@ -79,7 +79,7 @@ map.addEventListener ('mousemove' , (event) => {
     const distanceBetweenMouseAndRapper = calcD(mousePosition.x, mousePosition.y, rapperPosition.x + 25, rapperPosition.y + 25)
     let volume = 1 - distanceBetweenMouseAndRapper / 1000
     audio.volume = volume
-    audio.pitch = volume
+    audio.pitch = volume * 4
     audio.playbackRate = volume * 2.2
 })
 
@@ -94,7 +94,6 @@ rapper.addEventListener('click', function () {
     rapperPicture.classList.add('clicked')
     audioWin.play()
     stopFunction = true
-    console.log('test')
 })
 
 map.addEventListener('click', () => {
